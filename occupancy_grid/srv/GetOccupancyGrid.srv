@@ -1,0 +1,14 @@
+##
+# @File: GetOccupancyGrid.srv
+#
+# @brief
+# Can be used to get information about the occupancy grid, from the
+# occupancy grid node.
+#
+
+---
+
+# The occupancy grid itself
+nav_msgs/OccupancyGrid grid
+
+## GetOccupancyGrid.srv ##

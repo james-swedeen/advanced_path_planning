@@ -1,20 +1,15 @@
-# Advanced Path Planning
+# RRT Search
 
+This package implements several path planning algorithms with a generic C++ interface.
+Many of the algorithms have been implemented with both the original edge generation methodology and a fillet-based formulation which makes considering kinematic constraints like make curvature much faster, see the Figure below [[11](#11), [12](#12)].
 
-This repository implements several path planning algorithms with a generic C++ interface.
-Many of the algorithms have been implemented with both the original edge generation methodology and a fillet-based formulation which makes considering kinematic constraints like make curvature much faster, see the Figures below [[11](#11), [12](#12)].
+<img src="./convergence_plot.png">
+<img src="./manhattan_world.png">
+
 Additionally, package includes various edge generators that can be used with each planner that simulate given vehicle models.
 For example, the Dubin's car and airplane.
 
-<img src="./pics/three_worlds.png">
-<img src="./pics/convergence_plots.png">
-
-This repository contains many simulated environments for testing and comparing the algorithms implemented.
-For example, see the simulation of the actual buildings in Manhattan below.
-
-<img src="./pics/uav_sim.png">
-
-The table below lists each of the algorithms that this repository implements, the variations each algorithm supports, and the names of the papers that purposed them.
+The table below lists each of the algorithms that this package implements, the variations each algorithm supports, and the names of the papers that purposed them.
 
 | Algorithm                       | K Nearest Searches | Fillet-Based | Source      |
 |---------------------------------|--------------------|--------------|-------------|
@@ -28,42 +23,53 @@ The table below lists each of the algorithms that this repository implements, th
 | BIT\*                           | No                 | Yes          | [[10](#10)] |
 | Source of the variants          | [[7](#7)]          | Novel        |             |
 
-<figure>
-  <figcaption>A step by step demonstration of the BIT* algorithm.</figcaption>
-  <img src="./pics/bit.gif">
-</figure>
-
 ## Dependencies
 
-This repository is intended to be used in a [ROS 2](https://docs.ros.org/en/jazzy/index.html) Colcon workspace.
+This package is intended to be used in a [ROS 2](https://docs.ros.org/en/jazzy/index.html) Colcon workspace.
 Other then Ament, which can be installed with the rest of the ROS 2 distribution you're using [here](https://docs.ros.org/en/jazzy/Installation.html), the following command will install all system dependencies on an Ubuntu system.
 
 ```bash
-sudo apt install libeigen3-dev libomp-dev libjemalloc2 libjemalloc-dev libopencv-dev libblas-dev liblapack-dev libtbb-dev libflann-dev ros-jazzy-ompl libboost-all-dev
+sudo apt install libeigen3-dev libomp-dev libboost-all-dev libblas-dev liblapack-dev libtbb-dev libjemalloc2 libjemalloc-dev libflann-dev
 ```
 Additionally, this package is dependent on two other repositories found here: https://github.com/james-swedeen/matplotlibcpp and https://github.com/james-swedeen/kalman_filter.
 
-## Sub Packages
+## Demonstrations
 
-### rrt_search
-This is where most of the path planning functionality is implemented and where the C++ API for the path planning may be found.
-This includes various path planning algorithms as well as various edge generators that can be used with them.
+### Path Planning Demonstrations
 
-### ompl_benchmark
-This package uses the [Open Motion Planning Library (OMPL)](https://ompl.kavrakilab.org/) to benchmark the algorithms developed in the rrt_search package.
+There are several launch files to demonstrate the path planning capabilities of this package with different path planning algorithms and constraints.
+To tun these demonstrations run one of the following commands.
+```bash
+ros2 launch rrt_search path_planning_demo.launch.py
+ros2 launch rrt_search dubins_path_planning_demo.launch.py
+ros2 launch rrt_search fillet_path_planning_demo.launch.py
+ros2 launch rrt_search reverse_fillet_path_planning_demo.launch.py
+```
+These will run the specified algorithms for the time that is specified in the launch files.
+After planning, the resulting plan and the environment obstacles will be plotted in a Matplotlib window.
 
-### occupancy_grid
-This package implements a basic occupancy grid data structure using OpenCV.
+### Error Budget Demonstration
 
-### visibility_graph
-This package implements the well know visibility graph path planner and is used in the rrt_search package.
+This package contains a node that can be used to generate error budges of the estimation errors a fixed wing UAV experiences while passing through GPS denied areas.
+The node reads in waypoints for the UAV dynamics to follow and GPS denied area information from the [ol_error_budget_demo.launch.py](./launch/ol_error_budget_demo.launch.py) ROS launch file.
+After simulating the UAV along the provided waypoints the node generates an error budget analysis and plots the results.
 
-### radar_detection
-This package provides the implementation of heuristics for the probability of detection by signal pulse radar station.
-It is used by the path planners when avoiding detection is mission critical.
+Once the code has been built and the workspace sourced, the error budget example can be ran with the following command.
+```bash
+ros2 launch rrt_search ol_error_budget_demo.launch.py
+```
+The program will not end until all of the generated plots are closed.
 
-### uav_interfaces
-This package defines a few ROS 2 message and service types.
+To change the trajectory the UAV takes or the location of the GPS denied areas the `ol_error_budget_demo.launch.py` launch file located in the rrt_search package can be modified.
+The `waypoints_dict` variable controls the number of waypoints that the UAV follows and each waypoints location.
+The `gps_denied_dict` variable controls the number and location of the GPS denied areas.
+
+
+## Known Issues
+
+1. Things that needs to be implemented or reimplemented
+  * Bidirectional-RRT variants
+  * Fillet-Based bidirectional variants
 
 ## References
 
