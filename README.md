@@ -2,8 +2,8 @@
 
 
 This repository implements several path planning algorithms with a generic C++ interface.
-Many of the algorithms have been implemented with both the original edge generation methodology and a fillet-based formulation which makes considering kinematic constraints like make curvature much faster, see the Figures below [[11](#11), [12](#12)].
-Additionally, package includes various edge generators that can be used with each planner that simulate given vehicle models.
+Many of the algorithms have been implemented with both the original edge generation methodology and a fillet-based formulation which makes considering kinematic constraints like max curvature much faster, see the Figures below [[11](#11), [12](#12)].
+Additionally, the package includes various edge generators that can be used with each planner that simulate given vehicle models.
 For example, the Dubin's car and airplane.
 
 <img src="./pics/three_worlds.png">
@@ -14,7 +14,7 @@ For example, see the simulation of the actual buildings in Manhattan below.
 
 <img src="./pics/uav_sim.png">
 
-The table below lists each of the algorithms that this repository implements, the variations each algorithm supports, and the names of the papers that purposed them.
+The table below lists each of the algorithms this repository implements, the variations each algorithm supports, and the names of the papers that proposed them.
 
 | Algorithm                       | K Nearest Searches | Fillet-Based | Source      |
 |---------------------------------|--------------------|--------------|-------------|
@@ -35,8 +35,8 @@ The table below lists each of the algorithms that this repository implements, th
 
 ## Dependencies
 
-This repository is intended to be used in a [ROS 2](https://docs.ros.org/en/jazzy/index.html) Colcon workspace.
-Other then Ament, which can be installed with the rest of the ROS 2 distribution you're using [here](https://docs.ros.org/en/jazzy/Installation.html), the following command will install all system dependencies on an Ubuntu system.
+This repository is intended for use in a [ROS 2](https://docs.ros.org/en/jazzy/index.html) Colcon workspace.
+Other than Ament, which can be installed with the rest of the ROS 2 distribution you're using [here](https://docs.ros.org/en/jazzy/Installation.html), the following command will install all system dependencies on an Ubuntu system.
 
 ```bash
 sudo apt install libeigen3-dev libomp-dev libjemalloc2 libjemalloc-dev libopencv-dev libblas-dev liblapack-dev libtbb-dev libflann-dev ros-jazzy-ompl libboost-all-dev
@@ -60,7 +60,7 @@ This package implements the well know visibility graph path planner and is used 
 
 ### radar_detection
 This package provides the implementation of heuristics for the probability of detection by signal pulse radar station.
-It is used by the path planners when avoiding detection is mission critical.
+It is used by path planners when avoiding detection is mission critical.
 
 ### uav_interfaces
 This package defines a few ROS 2 message and service types.
